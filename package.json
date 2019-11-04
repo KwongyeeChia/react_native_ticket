@@ -7,11 +7,14 @@
     "ios": "react-native run-ios",
     "start": "react-native start",
     "test": "jest",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "clean": "cd android && ./gradlew clean"
   },
   "dependencies": {
     "react": "16.9.0",
-    "react-native": "0.61.3"
+    "react-native": "0.61.3",
+    "react-native-gesture-handler": "^1.4.1",
+    "react-navigation": "^3.11.1"
   },
   "devDependencies": {
     "@babel/core": "^7.6.4",
