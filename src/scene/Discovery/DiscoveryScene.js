@@ -6,7 +6,7 @@ class DiscoveryScene extends Component {
     return {
       headerTitle: <Text>DiscoveryScene</Text>,
       headerStyle: {
-        backgroundColor: '#01af63',
+        // backgroundColor: '#01af63',
       },
       headerTintColor: '#fff',
       headerTitleStyle: {
@@ -15,6 +15,7 @@ class DiscoveryScene extends Component {
     };
   };
   UNSAFE_componentWillMount() {
+    console.log('run Discovery =>');
     // console.log('Home props:', this.props.navigation.state.params);
   }
   render() {

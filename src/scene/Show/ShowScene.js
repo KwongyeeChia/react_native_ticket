@@ -5,9 +5,9 @@ class ShowScene extends Component {
   static navigationOptions = ({navigation}) => {
     return {
       headerTitle: <Text>ShowScene</Text>,
-      headerStyle: {
-        backgroundColor: '#01af63',
-      },
+      // headerStyle: {
+      //   backgroundColor: '#01af63',
+      // },
       headerTintColor: '#fff',
       headerTitleStyle: {
         fontWeight: 'bold',
@@ -15,6 +15,7 @@ class ShowScene extends Component {
     };
   };
   UNSAFE_componentWillMount() {
+    console.log('run Show =>');
     // console.log('Home props:', this.props.navigation.state.params);
   }
   render() {

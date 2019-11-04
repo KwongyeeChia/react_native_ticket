@@ -6,7 +6,6 @@ import {
   createBottomTabNavigator,
   createAppContainer,
   TabBarBottom,
-  NavigationActions,
 } from 'react-navigation';
 
 import color from './widget/color';
@@ -21,6 +20,8 @@ import ShowScene from './scene/Show/ShowScene';
 import MineScene from './scene/Mine/MineScene';
 // unTabScene
 import PermissionScene from './widget/PermissionScene';
+import WebScene from './widget/WebScene';
+
 // 配置高亮的场景
 const lightContentScenes = ['Home', 'Mine'];
 // 读取当前路由名称
@@ -38,6 +39,7 @@ function getCurrentRouteName(navigationState) {
 class RootScene extends Component {
   constructor() {
     super();
+    StatusBar.setBarStyle('light-content');
   }
   someEvent(someRouteName) {
     console.log('someRouteName:', someRouteName);
@@ -158,11 +160,16 @@ const AppBottomTab = createBottomTabNavigator(
     },
   },
 );
+
+AppBottomTab.navigationOptions = {
+  header: null,
+};
 // 根路由
 const AppRootStack = createStackNavigator(
   {
     Tab: {screen: AppBottomTab},
-    Web: {screen: PermissionScene},
+    Web: {screen: WebScene},
+    Per: {screen: PermissionScene},
   },
   {
     mode: 'card',

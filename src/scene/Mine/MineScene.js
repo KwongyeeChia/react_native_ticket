@@ -5,9 +5,9 @@ class MineScene extends Component {
   static navigationOptions = ({navigation}) => {
     return {
       headerTitle: <Text>MineScene</Text>,
-      headerStyle: {
-        backgroundColor: '#01af63',
-      },
+      // headerStyle: {
+      //   backgroundColor: '#01af63',
+      // },
       headerTintColor: '#fff',
       headerTitleStyle: {
         fontWeight: 'bold',
@@ -15,6 +15,7 @@ class MineScene extends Component {
     };
   };
   UNSAFE_componentWillMount() {
+    console.log('run Mine =>');
     // console.log('Home props:', this.props.navigation.state.params);
   }
   render() {

@@ -5,9 +5,9 @@ class MovieScene extends Component {
   static navigationOptions = ({navigation}) => {
     return {
       headerTitle: <Text>MovieScene</Text>,
-      headerStyle: {
-        backgroundColor: '#01af63',
-      },
+      // headerStyle: {
+      //   backgroundColor: '#01af63',
+      // },
       headerTintColor: '#fff',
       headerTitleStyle: {
         fontWeight: 'bold',
@@ -15,6 +15,7 @@ class MovieScene extends Component {
     };
   };
   UNSAFE_componentWillMount() {
+    console.log('run Movie =>');
     // console.log('Home props:', this.props.navigation.state.params);
   }
   render() {

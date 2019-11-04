@@ -1,20 +1,33 @@
 import React, {Component} from 'react';
 import {Button, View, Text, StatusBar} from 'react-native';
 
+StatusBar.setBarStyle('default');
+StatusBar.setTranslucent(true);
+StatusBar.setBackgroundColor('transparent');
+
 class HomeScene extends Component {
   static navigationOptions = ({navigation}) => {
     return {
-      headerTitle: <Text>HomeScene</Text>,
+      headerTitle: <Text>DiscoveryScene</Text>,
+      // headerLeft: <Text>返回</Text>,
+      // headerTitle: <Text>HomeScene</Text>,
+      // headerRight: (
+      //   <View>
+      //     <Text>去首页</Text>
+      //   </View>
+      // ),
       headerStyle: {
-        backgroundColor: '#01af63',
+        backgroundColor: 'red',
+        textAlign: 'center',
       },
-      headerTintColor: '#fff',
+      headerTintColor: '#333',
       headerTitleStyle: {
         fontWeight: 'bold',
       },
     };
   };
   UNSAFE_componentWillMount() {
+    console.log('run Home =>');
     // console.log('Home props:', this.props.navigation.state.params);
   }
   render() {
@@ -22,7 +35,10 @@ class HomeScene extends Component {
     return (
       <View>
         <Text>hello</Text>
-        <Button title="HomeScene" onPress={() => navigate('Web')} />
+        <Button
+          title="HomeScene"
+          onPress={() => navigate('Web', {url: 'https://www.baidu.com'})}
+        />
       </View>
     );
   }
