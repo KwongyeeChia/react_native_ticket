@@ -8,8 +8,9 @@ class TabBarItem extends Component {
       : this.props.normalImage;
     return (
       <Image
-      // source={this.props.focused ? selectedImage : this.props.normalImage}
-      // style={{tintColor: this.props.tintColor, width: 25, height: 25}}
+        source={this.props.focused ? selectedImage : this.props.normalImage}
+        // eslint-disable-next-line react-native/no-inline-styles
+        style={{tintColor: this.props.tintColor, width: 22, height: 22}}
       />
     );
   }

@@ -2,6 +2,18 @@ import React from 'react';
 import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
 
 export default class ModalScreen extends React.Component {
+  static navigationOptions = ({navigation}) => {
+    return {
+      // headerTitle: <Text>ShowScene</Text>,
+      // headerStyle: {
+      //   backgroundColor: '#01af63',
+      // },
+      // headerTintColor: '#fff',
+      // headerTitleStyle: {
+      //   fontWeight: 'bold',
+      // },
+    };
+  };
   render() {
     return (
       <View style={styles.modalScreenPanel}>

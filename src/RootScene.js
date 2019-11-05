@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {StatusBar} from 'react-native';
+import {StatusBar, BackHandler, Platform, ToastAndroid} from 'react-native';
 
 import {
   createStackNavigator,
@@ -22,8 +22,8 @@ import MineScene from './scene/Mine/MineScene';
 import PermissionScene from './widget/PermissionScene';
 import WebScene from './widget/WebScene';
 
-// 配置高亮的场景
-const lightContentScenes = ['Home', 'Mine'];
+// 配置沉浸式状态栏及元素高亮
+const lightContentScenes = ['Mine', 'Per'];
 // 读取当前路由名称
 function getCurrentRouteName(navigationState) {
   if (!navigationState) {
@@ -41,8 +41,35 @@ class RootScene extends Component {
     super();
     StatusBar.setBarStyle('light-content');
   }
+  componentDidMount() {
+    if (Platform.OS === 'android') {
+      BackHandler.addEventListener('hardwareBackPress', this.onBackAndroid);
+    }
+  }
+
+  componentWillUnmount() {
+    if (Platform.OS === 'android') {
+      BackHandler.removeEventListener('hardwareBackPress', this.onBackAndroid);
+    }
+  }
+  onBackAndroid = () => {
+    console.log('this =>', this.props);
+    return;
+    //禁用返回键
+    if (this.props.navigation.isFocused()) {
+      //判断   该页面是否处于聚焦状态
+      if (this.lastBackPressed && this.lastBackPressed + 2000 >= Date.now()) {
+        //最近2秒内按过back键，可以退出应用。
+        // return false;
+        BackHandler.exitApp(); //直接退出APP
+      } else {
+        this.lastBackPressed = Date.now();
+        ToastAndroid.show('再按一次退出应用', 1000); //提示
+        return true;
+      }
+    }
+  };
   someEvent(someRouteName) {
-    console.log('someRouteName:', someRouteName);
     // call navigate for AppNavigator here:
     // this.navigator &&
     //   this.navigator.dispatch(
@@ -53,21 +80,23 @@ class RootScene extends Component {
     return (
       <AppContainer
         ref={nav => {
+          console.log('nav =>', nav);
           this.navigator = nav;
         }}
         // 路由状态监听
-        onNavigationStateChange={(prevState, currentState) => {
-          console.log('prevState:', prevState, 'currentState', currentState);
-          const currentScene = getCurrentRouteName(currentState);
-          const previousScene = getCurrentRouteName(prevState);
-          if (previousScene !== currentScene) {
-            if (lightContentScenes.indexOf(currentScene) >= 0) {
-              StatusBar.setBarStyle('light-content');
-            } else {
-              StatusBar.setBarStyle('dark-content');
-            }
-          }
-        }}
+        // onNavigationStateChange={(prevState, currentState) => {
+        //   const currentScene = getCurrentRouteName(currentState);
+        //   const previousScene = getCurrentRouteName(prevState);
+        //   if (previousScene !== currentScene) {
+        //     StatusBar.setTranslucent(true); // 控制scene是否显示在系统状态栏下方
+        //     StatusBar.setBackgroundColor('transparent'); // 状态栏背景色
+        //     if (lightContentScenes.indexOf(currentScene) >= 0) {
+        //       StatusBar.setBarStyle('light-content');
+        //     } else {
+        //       StatusBar.setBarStyle('dark-content');
+        //     }
+        //   }
+        // }}
       />
     );
   }
@@ -77,77 +106,82 @@ class RootScene extends Component {
 const AppBottomTab = createBottomTabNavigator(
   {
     Home: {
-      screen: createStackNavigator({Home: HomeScene}),
-      navigationOptions: ({navigation}) => ({
+      screen: createStackNavigator({Home: HomeScene}, {headerMode: 'none'}),
+      navigationOptions: {
         tabBarLabel: '首页',
         tabBarIcon: ({focused, tintColor}) => (
           <TabBarItem
             tintColor={tintColor}
             focused={focused}
-            // normalImage={require('./img/tabbar/tabbar_homepage.png')}
-            // selectedImage={require('./img/tabbar/tabbar_homepage_selected.png')}
+            normalImage={require('./img/tabbar/cinema_normal.png')}
+            selectedImage={require('./img/tabbar/cinema_selected.png')}
           />
         ),
-      }),
+      },
     },
     Movie: {
-      screen: createStackNavigator({Home: MovieScene}),
-      navigationOptions: ({navigation}) => ({
+      screen: createStackNavigator({Home: MovieScene}, {headerMode: 'none'}),
+      navigationOptions: {
         tabBarLabel: '电影',
         tabBarIcon: ({focused, tintColor}) => (
           <TabBarItem
             tintColor={tintColor}
             focused={focused}
-            // normalImage={require('./img/tabbar/tabbar_homepage.png')}
-            // selectedImage={require('./img/tabbar/tabbar_homepage_selected.png')}
+            normalImage={require('./img/tabbar/film_normal.png')}
+            selectedImage={require('./img/tabbar/film_selected.png')}
           />
         ),
-      }),
+      },
     },
     Discovery: {
-      screen: createStackNavigator({Nearby: DiscoveryScene}),
-      navigationOptions: ({navigation}) => ({
+      screen: createStackNavigator(
+        {Nearby: DiscoveryScene},
+        {headerMode: 'none'},
+      ),
+      navigationOptions: {
         tabBarLabel: '发现',
         tabBarIcon: ({focused, tintColor}) => (
           <TabBarItem
             tintColor={tintColor}
             focused={focused}
-            // normalImage={require('./img/tabbar/tabbar_merchant.png')}
-            // selectedImage={require('./img/tabbar/tabbar_merchant_selected.png')}
+            normalImage={require('./img/tabbar/discovery_normal.png')}
+            selectedImage={require('./img/tabbar/discovery_selected.png')}
           />
         ),
-      }),
+      },
     },
     Show: {
-      screen: createStackNavigator({Order: ShowScene}),
-      navigationOptions: ({navigation}) => ({
+      screen: createStackNavigator({Order: ShowScene}, {headerMode: 'none'}),
+      navigationOptions: {
         tabBarLabel: '演出',
         tabBarIcon: ({focused, tintColor}) => (
           <TabBarItem
             tintColor={tintColor}
             focused={focused}
-            // normalImage={require('./img/tabbar/tabbar_order.png')}
-            // selectedImage={require('./img/tabbar/tabbar_order_selected.png')}
+            normalImage={require('./img/tabbar/damai_normal.png')}
+            selectedImage={require('./img/tabbar/damai_selected.png')}
           />
         ),
-      }),
+      },
     },
     Mine: {
-      screen: createStackNavigator({Mine: MineScene}),
-      navigationOptions: ({navigation}) => ({
+      screen: createStackNavigator({Mine: MineScene}, {headerMode: 'none'}),
+      navigationOptions: {
         tabBarLabel: '我的',
         tabBarIcon: ({focused, tintColor}) => (
           <TabBarItem
             tintColor={tintColor}
             focused={focused}
-            // normalImage={require('./img/tabbar/tabbar_mine.png')}
-            // selectedImage={require('./img/tabbar/tabbar_mine_selected.png')}
+            normalImage={require('./img/tabbar/mine_normal.png')}
+            selectedImage={require('./img/tabbar/mine_selected.png')}
           />
         ),
-      }),
+      },
     },
   },
   {
+    // tabBarComponent: () => null, 隐藏底部tabBar
+    initialRouteName: 'Home', // 指定tabBar 默认显示页面
     tabBarComponent: TabBarBottom,
     tabBarPosition: 'bottom',
     lazy: true,
@@ -156,14 +190,19 @@ const AppBottomTab = createBottomTabNavigator(
     tabBarOptions: {
       activeTintColor: color.primary,
       inactiveTintColor: color.gray,
-      style: {backgroundColor: '#ffffff'},
+      style: {
+        backgroundColor: '#fff',
+        // borderTopWidth: 0.5,
+        // borderTopColor: color.gray,
+      },
     },
+    backBehavior: 'none',
   },
 );
 
-AppBottomTab.navigationOptions = {
-  header: null,
-};
+// AppBottomTab.navigationOptions = {
+// header: null,
+// };
 // 根路由
 const AppRootStack = createStackNavigator(
   {
@@ -172,8 +211,9 @@ const AppRootStack = createStackNavigator(
     Per: {screen: PermissionScene},
   },
   {
-    mode: 'card',
-    headerMode: 'none',
+    mode: 'modal',
+    initialRouteName: 'Tab', //定义最外层得初始跳转页
+    headerMode: 'none', // 控制是否显示系统header控件
     defaultNavigationOptions: {
       headerBackTitle: null,
       headerTintColor: '#333333',

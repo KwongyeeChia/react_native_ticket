@@ -1,13 +1,18 @@
 import React, {Component} from 'react';
 // InteractionManager
-import {View, Text, StyleSheet, InteractionManager} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  InteractionManager,
+  StatusBar,
+} from 'react-native';
 
 import {WebView} from 'react-native-webview';
 
 class WebScene extends Component {
-  static navigationOptions = ({navigation}) => ({
-    title: '没标题了',
-  });
+  // static navigationOptions = ({navigation}) => ({
+  // });
   constructor(props) {
     super(props);
     this.state = {
@@ -29,14 +34,14 @@ class WebScene extends Component {
           // originWhitelist={['*']}
           // source={this.state.source}
           source={this.state.source}
-          // onLoadEnd={e => this.onLoadEnd(e)}
+          onLoadEnd={e => this.onLoadEnd(e)}
           scalesPageToFit
         />
       </View>
     );
   }
-  onLoadEnd() {
-    // if ()
+  onLoadEnd(e) {
+    console.log('e =>', e);
   }
 }
 const styles = StyleSheet.create({
