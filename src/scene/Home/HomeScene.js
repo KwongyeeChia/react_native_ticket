@@ -20,6 +20,9 @@ class HomeScene extends Component {
     };
   }
   UNSAFE_componentWillMount() {
+    // setInterval(() => {
+    //   console.log('nihao =>');
+    // }, 1000);
     if (Platform.OS === 'android') {
       BackHandler.addEventListener('hardwareBackPress', this.onBackAndroid);
     }
@@ -53,9 +56,9 @@ class HomeScene extends Component {
           title="H5"
           onPress={() => navigate('Web', {url: 'https://www.baidu.com'})}
         />
-        <Button title="用户许可" onPress={() => navigate('Per')} />
+        <Button title="用户许可sjdfk" onPress={() => navigate('Per')} />
         <Button
-          title="打开模态窗口"
+          title="打开模态窗口窗口"
           onPress={() => DeviceEventEmitter.emit('openGlobalModal')}
         />
       </SafeAreaView>

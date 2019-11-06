@@ -1,5 +1,12 @@
 import React, {Component} from 'react';
-import {StatusBar, View, Text, Button, DeviceEventEmitter} from 'react-native';
+import {
+  StatusBar,
+  View,
+  Text,
+  Button,
+  DeviceEventEmitter,
+  Animated,
+} from 'react-native';
 import {
   createStackNavigator,
   createBottomTabNavigator,
@@ -43,7 +50,23 @@ class RootScene extends Component {
     super();
     this.navigator = '';
     this.GlobalModal = '';
+    this.state = {
+      visible: false,
+      scale: new Animated.Value(1),
+    };
   }
+  scaleModal = () => {
+    this.state.scale.setValue(0);
+    Animated.spring(this.state.scale, {
+      toValue: 1,
+    }).start();
+  };
+  hideModal = () => {
+    Animated.timing(this.state.scale, {
+      toValue: 0,
+    }).start();
+  };
+
   componentDidMount() {
     StatusBar.setTranslucent(true); // 控制scene是否显示在系统状态栏下方
     StatusBar.setBackgroundColor('transparent'); // 状态栏背景色
@@ -52,22 +75,30 @@ class RootScene extends Component {
     this.GlobalModal = DeviceEventEmitter.addListener(
       'openGlobalModal',
       msg => {
-        console.log('msg =>', msg);
+        this.scaleModal();
         let modal = new ModalManager(
           (
-            <View
+            <Animated.View
               style={{
                 position: 'absolute',
                 top: 0,
                 right: 0,
                 bottom: 0,
                 left: 0,
-                backgroundColor: 'rgba(0, 0, 0, 0.2)',
+                backgroundColor: 'rgba(0,0,0,0.2)',
+                justifyContent: 'center',
+                alignItems: 'center',
                 paddingTop: StatusBar.currentHeight,
-                // transform: [{scale: this.state.scaleAnimation}],
+                transform: [{scale: this.state.scale}],
               }}>
-              <Button title="modal.destory()" onPress={() => modal.destroy()} />
-            </View>
+              <Button
+                title="modal.destory()"
+                onPress={() => {
+                  this.hideModal();
+                  modal.destroy();
+                }}
+              />
+            </Animated.View>
           ),
         );
       },
