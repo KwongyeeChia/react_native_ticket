@@ -4,6 +4,7 @@ import {
   SafeAreaView,
   View,
   Text,
+  Image,
   Platform,
   BackHandler,
   ToastAndroid,
@@ -11,18 +12,16 @@ import {
 } from 'react-native';
 
 import CustomStatusBar from '../../widget/CustomStatusBar';
+import Loading from '../../widget/Loading';
 
 class HomeScene extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      modalVisible: true,
+      loadingVisible: false,
     };
   }
   UNSAFE_componentWillMount() {
-    // setInterval(() => {
-    //   console.log('nihao =>');
-    // }, 1000);
     if (Platform.OS === 'android') {
       BackHandler.addEventListener('hardwareBackPress', this.onBackAndroid);
     }
@@ -52,14 +51,21 @@ class HomeScene extends Component {
     return (
       <SafeAreaView>
         <CustomStatusBar />
+        {this.state.loadingVisible && (
+          <Loading visible={this.state.loadingVisible} />
+        )}
         <Button
           title="H5"
           onPress={() => navigate('Web', {url: 'https://www.baidu.com'})}
         />
-        <Button title="用户许可sjdfk" onPress={() => navigate('Per')} />
+        <Button title="用户许可" onPress={() => navigate('Per')} />
         <Button
-          title="打开模态窗口窗口"
+          title="打开模态窗口"
           onPress={() => DeviceEventEmitter.emit('openGlobalModal')}
+        />
+        <Button
+          title="打开Loading"
+          onPress={() => this.setState({loadingVisible: true})}
         />
       </SafeAreaView>
     );
