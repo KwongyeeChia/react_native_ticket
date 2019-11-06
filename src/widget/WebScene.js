@@ -7,7 +7,7 @@ import {
   InteractionManager,
   StatusBar,
 } from 'react-native';
-
+import CustomStatusBar from '../widget/CustomStatusBar';
 import {WebView} from 'react-native-webview';
 
 class WebScene extends Component {
@@ -28,6 +28,7 @@ class WebScene extends Component {
   render() {
     return (
       <View style={styles.container}>
+        <CustomStatusBar />
         <WebView
           automaticallyAdjustContentInsets={false}
           style={styles.webView}

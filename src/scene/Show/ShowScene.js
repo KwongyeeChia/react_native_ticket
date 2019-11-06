@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {Button, View, Text} from 'react-native';
+import CustomStatusBar from '../../widget/CustomStatusBar';
 
 class ShowScene extends Component {
   UNSAFE_componentWillMount() {
@@ -9,6 +10,7 @@ class ShowScene extends Component {
     const {navigate} = this.props.navigation;
     return (
       <View>
+        <CustomStatusBar />
         <Button title="ShowScene" onPress={() => navigate('Per')} />
       </View>
     );

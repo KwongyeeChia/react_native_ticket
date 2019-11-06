@@ -1,15 +1,16 @@
 import React, {Component} from 'react';
-import {StatusBar, BackHandler, Platform, ToastAndroid} from 'react-native';
-
+import {StatusBar, View, Text} from 'react-native';
 import {
   createStackNavigator,
   createBottomTabNavigator,
   createAppContainer,
   TabBarBottom,
+  NavigationActions,
 } from 'react-navigation';
+import {ModalManager} from 'react-native-root-modal';
 
 import color from './widget/color';
-import {screen, system} from './common';
+// import {screen, system} from './common';
 import TabBarItem from './widget/TabBarItem';
 
 // TabScene
@@ -39,64 +40,37 @@ function getCurrentRouteName(navigationState) {
 class RootScene extends Component {
   constructor() {
     super();
-    StatusBar.setBarStyle('light-content');
+    this.navigator = '';
   }
-  componentDidMount() {
-    if (Platform.OS === 'android') {
-      BackHandler.addEventListener('hardwareBackPress', this.onBackAndroid);
-    }
-  }
-
-  componentWillUnmount() {
-    if (Platform.OS === 'android') {
-      BackHandler.removeEventListener('hardwareBackPress', this.onBackAndroid);
-    }
-  }
-  onBackAndroid = () => {
-    console.log('this =>', this.props);
-    return;
-    //禁用返回键
-    if (this.props.navigation.isFocused()) {
-      //判断   该页面是否处于聚焦状态
-      if (this.lastBackPressed && this.lastBackPressed + 2000 >= Date.now()) {
-        //最近2秒内按过back键，可以退出应用。
-        // return false;
-        BackHandler.exitApp(); //直接退出APP
-      } else {
-        this.lastBackPressed = Date.now();
-        ToastAndroid.show('再按一次退出应用', 1000); //提示
-        return true;
-      }
-    }
-  };
+  componentDidMount() {}
+  componentWillUnmount() {}
+  // call navigate for AppNavigator here:
   someEvent(someRouteName) {
-    // call navigate for AppNavigator here:
-    // this.navigator &&
-    //   this.navigator.dispatch(
-    //     NavigationActions.navigate({routeName: someRouteName}),
-    //   );
+    this.navigator &&
+      this.navigator.dispatch(
+        NavigationActions.navigate({routeName: someRouteName}),
+      );
   }
   render() {
     return (
       <AppContainer
         ref={nav => {
-          console.log('nav =>', nav);
           this.navigator = nav;
         }}
         // 路由状态监听
-        // onNavigationStateChange={(prevState, currentState) => {
-        //   const currentScene = getCurrentRouteName(currentState);
-        //   const previousScene = getCurrentRouteName(prevState);
-        //   if (previousScene !== currentScene) {
-        //     StatusBar.setTranslucent(true); // 控制scene是否显示在系统状态栏下方
-        //     StatusBar.setBackgroundColor('transparent'); // 状态栏背景色
-        //     if (lightContentScenes.indexOf(currentScene) >= 0) {
-        //       StatusBar.setBarStyle('light-content');
-        //     } else {
-        //       StatusBar.setBarStyle('dark-content');
-        //     }
-        //   }
-        // }}
+        onNavigationStateChange={(prevState, currentState) => {
+          const currentScene = getCurrentRouteName(currentState);
+          const previousScene = getCurrentRouteName(prevState);
+          if (previousScene !== currentScene) {
+            StatusBar.setTranslucent(true); // 控制scene是否显示在系统状态栏下方
+            StatusBar.setBackgroundColor('transparent'); // 状态栏背景色
+            if (lightContentScenes.indexOf(currentScene) >= 0) {
+              StatusBar.setBarStyle('light-content');
+            } else {
+              StatusBar.setBarStyle('dark-content');
+            }
+          }
+        }}
       />
     );
   }
@@ -120,7 +94,7 @@ const AppBottomTab = createBottomTabNavigator(
       },
     },
     Movie: {
-      screen: createStackNavigator({Home: MovieScene}, {headerMode: 'none'}),
+      screen: createStackNavigator({Movie: MovieScene}, {headerMode: 'none'}),
       navigationOptions: {
         tabBarLabel: '电影',
         tabBarIcon: ({focused, tintColor}) => (
@@ -135,7 +109,7 @@ const AppBottomTab = createBottomTabNavigator(
     },
     Discovery: {
       screen: createStackNavigator(
-        {Nearby: DiscoveryScene},
+        {Discovery: DiscoveryScene},
         {headerMode: 'none'},
       ),
       navigationOptions: {
@@ -151,7 +125,7 @@ const AppBottomTab = createBottomTabNavigator(
       },
     },
     Show: {
-      screen: createStackNavigator({Order: ShowScene}, {headerMode: 'none'}),
+      screen: createStackNavigator({Show: ShowScene}, {headerMode: 'none'}),
       navigationOptions: {
         tabBarLabel: '演出',
         tabBarIcon: ({focused, tintColor}) => (
@@ -221,7 +195,14 @@ const AppRootStack = createStackNavigator(
     },
   },
 );
-
+// 注册scene之前创建
+// let modal = new ModalManager(
+//   (
+//     <View style={{width: screen.width, height: screen.height}}>
+//       <Text>hello</Text>
+//     </View>
+//   ),
+// );
 // 创建App根容器
 const AppContainer = createAppContainer(AppRootStack);
 
