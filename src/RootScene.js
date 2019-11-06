@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {StatusBar, View, Text} from 'react-native';
+import {StatusBar, View, Text, Button, DeviceEventEmitter} from 'react-native';
 import {
   createStackNavigator,
   createBottomTabNavigator,
@@ -7,7 +7,6 @@ import {
   TabBarBottom,
   NavigationActions,
 } from 'react-navigation';
-import {ModalManager} from 'react-native-root-modal';
 
 import color from './widget/color';
 // import {screen, system} from './common';
@@ -22,6 +21,8 @@ import MineScene from './scene/Mine/MineScene';
 // unTabScene
 import PermissionScene from './widget/PermissionScene';
 import WebScene from './widget/WebScene';
+
+import Modal, {AnimatedModal, ModalManager} from 'react-native-root-modal';
 
 // 配置沉浸式状态栏及元素高亮
 const lightContentScenes = ['Mine', 'Per'];
@@ -41,8 +42,37 @@ class RootScene extends Component {
   constructor() {
     super();
     this.navigator = '';
+    this.GlobalModal = '';
   }
-  componentDidMount() {}
+  componentDidMount() {
+    StatusBar.setTranslucent(true); // 控制scene是否显示在系统状态栏下方
+    StatusBar.setBackgroundColor('transparent'); // 状态栏背景色
+    StatusBar.setBarStyle('dark-content'); // 状态栏文字色
+    // 设置全局弹窗
+    this.GlobalModal = DeviceEventEmitter.addListener(
+      'openGlobalModal',
+      msg => {
+        console.log('msg =>', msg);
+        let modal = new ModalManager(
+          (
+            <View
+              style={{
+                position: 'absolute',
+                top: 0,
+                right: 0,
+                bottom: 0,
+                left: 0,
+                backgroundColor: 'rgba(0, 0, 0, 0.2)',
+                paddingTop: StatusBar.currentHeight,
+                // transform: [{scale: this.state.scaleAnimation}],
+              }}>
+              <Button title="modal.destory()" onPress={() => modal.destroy()} />
+            </View>
+          ),
+        );
+      },
+    );
+  }
   componentWillUnmount() {}
   // call navigate for AppNavigator here:
   someEvent(someRouteName) {
@@ -62,8 +92,6 @@ class RootScene extends Component {
           const currentScene = getCurrentRouteName(currentState);
           const previousScene = getCurrentRouteName(prevState);
           if (previousScene !== currentScene) {
-            StatusBar.setTranslucent(true); // 控制scene是否显示在系统状态栏下方
-            StatusBar.setBackgroundColor('transparent'); // 状态栏背景色
             if (lightContentScenes.indexOf(currentScene) >= 0) {
               StatusBar.setBarStyle('light-content');
             } else {
@@ -195,14 +223,6 @@ const AppRootStack = createStackNavigator(
     },
   },
 );
-// 注册scene之前创建
-// let modal = new ModalManager(
-//   (
-//     <View style={{width: screen.width, height: screen.height}}>
-//       <Text>hello</Text>
-//     </View>
-//   ),
-// );
 // 创建App根容器
 const AppContainer = createAppContainer(AppRootStack);
 

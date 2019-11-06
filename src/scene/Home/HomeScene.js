@@ -1,17 +1,23 @@
 import React, {Component} from 'react';
 import {
   Button,
+  SafeAreaView,
   View,
   Text,
   Platform,
   BackHandler,
   ToastAndroid,
+  DeviceEventEmitter,
 } from 'react-native';
+
 import CustomStatusBar from '../../widget/CustomStatusBar';
 
 class HomeScene extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      modalVisible: true,
+    };
   }
   UNSAFE_componentWillMount() {
     if (Platform.OS === 'android') {
@@ -37,17 +43,22 @@ class HomeScene extends Component {
       }
     }
   };
+
   render() {
     const {navigate} = this.props.navigation;
     return (
-      <View>
+      <SafeAreaView>
         <CustomStatusBar />
         <Button
           title="H5"
           onPress={() => navigate('Web', {url: 'https://www.baidu.com'})}
         />
         <Button title="用户许可" onPress={() => navigate('Per')} />
-      </View>
+        <Button
+          title="打开模态窗口"
+          onPress={() => DeviceEventEmitter.emit('openGlobalModal')}
+        />
+      </SafeAreaView>
     );
   }
 }
