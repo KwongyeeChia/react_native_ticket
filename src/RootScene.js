@@ -263,8 +263,8 @@ const AppBottomTab = createBottomTabNavigator(
       inactiveTintColor: color.gray,
       style: {
         backgroundColor: '#fff',
-        // borderTopWidth: 0.5,
-        // borderTopColor: color.gray,
+        borderTopWidth: 0.5,
+        borderTopColor: color.gray,
       },
     },
     backBehavior: 'none',
