@@ -3,9 +3,11 @@ import {
   StatusBar,
   View,
   Text,
+  StyleSheet,
   Button,
   DeviceEventEmitter,
   Animated,
+  TouchableOpacity,
 } from 'react-native';
 import {
   createStackNavigator,
@@ -28,7 +30,7 @@ import MineScene from './scene/Mine/MineScene';
 // unTabScene
 import PermissionScene from './widget/PermissionScene';
 import WebScene from './widget/WebScene';
-
+// widget
 import Modal, {AnimatedModal, ModalManager} from 'react-native-root-modal';
 
 // 配置沉浸式状态栏及元素高亮
@@ -49,11 +51,70 @@ class RootScene extends Component {
   constructor() {
     super();
     this.navigator = '';
+
+    this.GlobalModalListener = '';
     this.GlobalModal = '';
+
     this.state = {
-      visible: false,
       scale: new Animated.Value(1),
     };
+  }
+
+  componentDidMount() {
+    StatusBar.setTranslucent(true); // 控制scene是否显示在系统状态栏下方
+    StatusBar.setBackgroundColor('transparent'); // 状态栏背景色
+    StatusBar.setBarStyle('dark-content'); // 状态栏文字色
+    // 全局弹窗 用于折扣活动，不设置于每个组件中
+    this.GlobalModalListener = DeviceEventEmitter.addListener(
+      'openGlobalModalEmit',
+      msg => {
+        if (this.GlobalModal) {
+          this.scaleModal();
+          this.GlobalModal.update(
+            <Animated.View
+              style={[
+                styles.GlobalModalWrap,
+                {
+                  transform: [{scale: this.state.scale}],
+                },
+              ]}>
+              {/* 这里想要自定义 */}
+              <Button
+                title="modal.destory()"
+                onPress={() => {
+                  this.hideModal();
+                  this.GlobalModal.destroy();
+                }}
+              />
+              {/* 这里想要自定义 */}
+            </Animated.View>,
+          );
+        } else {
+          this.scaleModal();
+          this.GlobalModal = new ModalManager(
+            (
+              <Animated.View
+                style={[
+                  styles.GlobalModalWrap,
+                  {
+                    transform: [{scale: this.state.scale}],
+                  },
+                ]}>
+                {/* 这里想要自定义 */}
+                <Button
+                  title="modal.destory()"
+                  onPress={() => {
+                    this.hideModal();
+                    this.GlobalModal.destroy();
+                  }}
+                />
+                {/* 这里想要自定义 */}
+              </Animated.View>
+            ),
+          );
+        }
+      },
+    );
   }
   scaleModal = () => {
     this.state.scale.setValue(0);
@@ -66,45 +127,9 @@ class RootScene extends Component {
       toValue: 0,
     }).start();
   };
-
-  componentDidMount() {
-    StatusBar.setTranslucent(true); // 控制scene是否显示在系统状态栏下方
-    StatusBar.setBackgroundColor('transparent'); // 状态栏背景色
-    StatusBar.setBarStyle('dark-content'); // 状态栏文字色
-    // 设置全局弹窗
-    this.GlobalModal = DeviceEventEmitter.addListener(
-      'openGlobalModal',
-      msg => {
-        this.scaleModal();
-        let modal = new ModalManager(
-          (
-            <Animated.View
-              style={{
-                position: 'absolute',
-                top: 0,
-                right: 0,
-                bottom: 0,
-                left: 0,
-                backgroundColor: 'rgba(0,0,0,0.2)',
-                justifyContent: 'center',
-                alignItems: 'center',
-                paddingTop: StatusBar.currentHeight,
-                transform: [{scale: this.state.scale}],
-              }}>
-              <Button
-                title="modal.destory()"
-                onPress={() => {
-                  this.hideModal();
-                  modal.destroy();
-                }}
-              />
-            </Animated.View>
-          ),
-        );
-      },
-    );
+  componentWillUnmount() {
+    this.GlobalModalListener && this.GlobalModalListener.remove();
   }
-  componentWillUnmount() {}
   // call navigate for AppNavigator here:
   someEvent(someRouteName) {
     this.navigator &&
@@ -134,6 +159,19 @@ class RootScene extends Component {
     );
   }
 }
+const styles = StyleSheet.create({
+  GlobalModalWrap: {
+    position: 'absolute',
+    top: 0,
+    right: 0,
+    bottom: 0,
+    left: 0,
+    backgroundColor: 'rgba(0,0,0,0.2)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingTop: StatusBar.currentHeight,
+  },
+});
 
 // 创建AppTabBar
 const AppBottomTab = createBottomTabNavigator(

@@ -1,58 +1,67 @@
 import React, {Component} from 'react';
-import {View, Text, Image} from 'react-native';
+import {View, Text, Image, StyleSheet} from 'react-native';
 import {screen} from '../common';
 
 export default class Loading extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      animationOrder: 1,
-      loadingTimer: null,
+      animationOrder: 0,
+      animationTimer: null,
     };
   }
   UNSAFE_componentWillMount() {
-    let {animationOrder, loadingTimer} = this.state;
-    if (this.props.visible) {
-      loadingTimer = setInterval(() => {
+    let {animationOrder, animationTimer} = this.state;
+    if (!this.props.loadingVisible) {
+      animationTimer && clearInterval(animationTimer);
+    } else {
+      animationTimer = setInterval(() => {
         animationOrder++;
-        if (animationOrder > 4) {
-          animationOrder = 1;
+        if (animationOrder > 3) {
+          animationOrder = 0;
         }
         this.setState({
           animationOrder,
         });
-      }, 200);
-    } else {
-      loadingTimer && clearInterval(loadingTimer);
+      }, 180);
     }
   }
-  loadingAnimate = order => {
-    switch (order) {
-      case 1:
-        return require('../img/animation/movie_loading1.png');
-      case 2:
-        return require('../img/animation/movie_loading2.png');
-      case 3:
-        return require('../img/animation/movie_loading3.png');
-      case 4:
-        return require('../img/animation/movie_loading4.png');
-      default:
-        return require('../img/animation/movie_loading1.png');
-    }
+  loadingPrepare = () => {
+    return (
+      <View>
+        <Image
+          style={styles.animationPicHide}
+          source={require('../img/animation/movie_loading1.png')}
+        />
+        <Image
+          style={styles.animationPicHide}
+          source={require('../img/animation/movie_loading2.png')}
+        />
+        <Image
+          style={styles.animationPicHide}
+          source={require('../img/animation/movie_loading3.png')}
+        />
+        <Image
+          style={styles.animationPicHide}
+          source={require('../img/animation/movie_loading4.png')}
+        />
+      </View>
+    );
   };
   render() {
+    const animationPicArr = [
+      require('../img/animation/movie_loading1.png'),
+      require('../img/animation/movie_loading2.png'),
+      require('../img/animation/movie_loading3.png'),
+      require('../img/animation/movie_loading4.png'),
+    ];
     return (
-      <View
-        style={{
-          width: screen.width,
-          height: screen.height,
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}>
-        <View>
+      <View style={styles.animationPanel}>
+        {this.loadingPrepare()}
+        <View style={styles.animationState}>
           <Image
-            style={{width: 82.5, height: 121.5}}
-            source={this.loadingAnimate(this.state.animationOrder)}
+            style={styles.animationPic}
+            source={animationPicArr[this.state.animationOrder]}
           />
           <Text>正在加载，么么哒~</Text>
         </View>
@@ -60,3 +69,25 @@ export default class Loading extends Component {
     );
   }
 }
+
+const styles = StyleSheet.create({
+  animationPanel: {
+    width: screen.width,
+    height: screen.height,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  animationState: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  animationPic: {
+    width: 82.5,
+    height: 121.5,
+    marginBottom: 10,
+  },
+  animationPicHide: {
+    width: 0,
+    height: 0,
+  },
+});

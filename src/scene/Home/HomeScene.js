@@ -19,6 +19,7 @@ class HomeScene extends Component {
     super(props);
     this.state = {
       loadingVisible: false,
+      isClick: true,
     };
   }
   UNSAFE_componentWillMount() {
@@ -45,6 +46,20 @@ class HomeScene extends Component {
       }
     }
   };
+  showModal() {
+    let {isClick} = this.state;
+    if (isClick) {
+      this.setState({
+        isClick: false,
+      });
+      setTimeout(() => {
+        DeviceEventEmitter.emit('openGlobalModalEmit');
+        this.setState({
+          isClick,
+        });
+      }, 1000);
+    }
+  }
 
   render() {
     const {navigate} = this.props.navigation;
@@ -52,7 +67,7 @@ class HomeScene extends Component {
       <SafeAreaView>
         <CustomStatusBar />
         {this.state.loadingVisible && (
-          <Loading visible={this.state.loadingVisible} />
+          <Loading loadingVisible={this.state.loadingVisible} />
         )}
         <Button
           title="H5"
@@ -61,7 +76,9 @@ class HomeScene extends Component {
         <Button title="用户许可" onPress={() => navigate('Per')} />
         <Button
           title="打开模态窗口"
-          onPress={() => DeviceEventEmitter.emit('openGlobalModal')}
+          onPress={() => {
+            this.showModal();
+          }}
         />
         <Button
           title="打开Loading"
