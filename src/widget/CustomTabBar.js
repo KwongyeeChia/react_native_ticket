@@ -9,6 +9,7 @@ import {
   Platform,
   ScrollView,
 } from 'react-native';
+import {screen} from '../common/index';
 
 export default class CustomTabBar extends Component {
   constructor(props) {
@@ -27,26 +28,23 @@ export default class CustomTabBar extends Component {
 
     const fontWeight = isTabActive ? 'bold' : 'normal';
 
-    const Button = Platform.OS === 'ios' ? ButtonIos : ButtonAndroid;
+    // const Button = Platform.OS === 'ios' ? ButtonIos : ButtonAndroid;
 
     return (
-      <Button
-        // eslint-disable-next-line react-native/no-inline-styles
-        style={{flex: 1}}
+      <TouchableOpacity
+        style={styles.tabItem}
         key={name}
         accessible={true}
         accessibilityLabel={name}
         accessibilityTraits="button"
         onPress={() => onPressHandler(page)}>
-        <View style={styles.tab}>
-          <Text style={[{color: textColor, fontWeight}]}>{name}</Text>
-        </View>
-      </Button>
+        <Text style={[{color: textColor, fontWeight}]}>{name}</Text>
+      </TouchableOpacity>
     );
   }
 
   _renderUnderline() {
-    const containerWidth = this.props.containerWidth;
+    const containerWidth = this.props.containerWidth + 20;
     const numberOfTabs = this.props.tabs.length;
     const underlineWidth = this.props.tabUnderlineDefaultWidth
       ? this.props.tabUnderlineDefaultWidth
@@ -60,7 +58,7 @@ export default class CustomTabBar extends Component {
       width: underlineWidth,
       height: 2,
       borderRadius: 2,
-      backgroundColor: this.props.activeLineColor,
+      backgroundColor: this.props.activeColor,
       bottom: 0,
       left: deLen,
     };
@@ -102,22 +100,16 @@ export default class CustomTabBar extends Component {
   }
 
   render() {
-    // console.log('this.props =>', this.props);
     return (
-      <View style={[styles.tabs]}>
+      <View style={[styles.tabContainer]}>
         <ScrollView
           horizontal
-          contentContainerStyle={[
-            {
-              flex: 1,
-              flexDirection: 'row',
-              flexWrap: 'nowrap',
-              backgroundColor: 'tranparent',
-              overflow: 'hidden',
-            },
-            // {backgroundColor: this.props.backgroundColor},
-            // this.props.style,
-          ]}>
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={{
+            // flex: 1,
+            flexDirection: 'row',
+            justifyContent: 'space-around',
+          }}>
           {this.props.tabs.map((name, page) => {
             const isTabActive = this.props.activeTab === page;
             return this._renderTab(
@@ -148,19 +140,20 @@ const ButtonIos = props => (
 );
 
 const styles = StyleSheet.create({
-  tab: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  tabs: {
+  tabContainer: {
+    width: screen.width,
     height: 50,
     flexDirection: 'row',
-    // justifyContent: 'space-around',
     borderWidth: 1,
     borderTopWidth: 0,
     borderLeftWidth: 0,
     borderRightWidth: 0,
     borderColor: '#e0e0e0',
+  },
+  tabItem: {
+    flex: 1,
+    paddingRight: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });

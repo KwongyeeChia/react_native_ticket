@@ -2,22 +2,24 @@ import React, {Component} from 'react';
 import {
   Button,
   SafeAreaView,
-  View,
-  Text,
-  Image,
   Platform,
   BackHandler,
   ToastAndroid,
   DeviceEventEmitter,
-  SectionList,
+  StyleSheet,
   ScrollView,
+  View,
+  Text,
 } from 'react-native';
 
+import Swiper from 'react-native-swiper';
 import CustomStatusBar from '../../widget/CustomStatusBar';
-import CustomTabBar from '../../widget/CustomTabBar';
 import Loading from '../../widget/Loading';
-import ScrollableTabView from 'react-native-scrollable-tab-view';
-import {screen} from '../../common/index';
+import ScrollableTabView, {
+  ScrollableTabBar,
+} from 'react-native-scrollable-tab-view-forked';
+import {screen} from '../../common';
+import HomeArticleView from './HomeArticleView';
 
 class HomeScene extends Component {
   constructor(props) {
@@ -69,98 +71,63 @@ class HomeScene extends Component {
   render() {
     const {navigate} = this.props.navigation;
     let {currentTabIndex} = this.state;
-    // tabBarUnderlineStyle={{
-    //   backgroundColor: '#ff7887',
-    //   height: 4,
-    //   width: 18,
-    //   borderRadius: 2,
-    // }}
-    // tabBarTextStyle={{fontWeight: '700'}}
-    // tabBarActiveTextColor="#333"
-    // tabBarInactiveTextColor="#979797"
     return (
       <SafeAreaView style={{flex: 1}}>
+        {/* <ScrollView style={{flex: 1}}> */}
         <CustomStatusBar />
-        <ScrollableTabView
-          initialPage={0}
-          renderTabBar={() => (
-            <CustomTabBar
-              // backgroundColor={'#ffffff'}
-              tabUnderlineDefaultWidth={20} // default containerWidth / (numberOfTabs * 4)
-              tabUnderlineScaleX={3} // default 3
-              activeColor={'#333333'}
-              inactiveColor={'#979797'}
-              activeLineColor={'#ff7887'}
-              style={{flex: 1, overflow: 'hidden'}}
-            />
-          )}
-          onChangeTab={e => {
-            this.setState({currentTabIndex: e.i});
-          }}>
-          <View
-            tabLabel="关注"
-            style={{width: screen.width, height: screen.height}}>
-            <Text>关注</Text>
-            <Text>关注</Text>
-            <Text>关注</Text>
-            <Text>关注</Text>
-          </View>
-          <View
-            tabLabel="推荐"
-            style={{width: screen.width, height: screen.height}}>
-            <Text>推荐</Text>
-            <Text>推荐</Text>
-            <Text>推荐</Text>
-            <Text>推荐</Text>
-            <Text>推荐</Text>
-          </View>
-          <View
-            tabLabel="预告片"
-            style={{width: screen.width, height: screen.height}}>
-            <Text>预告片</Text>
-          </View>
-          <View
-            tabLabel="关注"
-            style={{width: screen.width, height: screen.height}}>
-            <Text>关注</Text>
-          </View>
-          <View
-            tabLabel="推荐"
-            style={{width: screen.width, height: screen.height}}>
-            <Text>推荐</Text>
-          </View>
-          <View
-            tabLabel="关注"
-            style={{width: screen.width, height: screen.height}}>
-            <Text>关注</Text>
-          </View>
-          <View
-            tabLabel="推荐"
-            style={{width: screen.width, height: screen.height}}>
-            <Text>推荐</Text>
-          </View>
-          <View
-            tabLabel="预告片"
-            style={{width: screen.width, height: screen.height}}>
-            <Text>预告片</Text>
-          </View>
-          <View
-            tabLabel="关注"
-            style={{width: screen.width, height: screen.height}}>
-            <Text>关注</Text>
-          </View>
-          <View
-            tabLabel="推荐"
-            style={{width: screen.width, height: screen.height}}>
-            <Text>推荐</Text>
-          </View>
-          <View
-            tabLabel="预告片"
-            style={{width: screen.width, height: screen.height}}>
-            <Text>预告片</Text>
-          </View>
-        </ScrollableTabView>
-        {/* {this.state.loadingVisible && (
+        <View style={{width: screen.width, height: 200}}>
+          <Swiper showsPagination={false}>
+            <View
+              style={{
+                flex: 1,
+                justifyContent: 'center',
+                alignItems: 'center',
+                backgroundColor: '#9DD6EB',
+              }}>
+              <Text
+                style={{
+                  color: '#fff',
+                  fontSize: 30,
+                  fontWeight: 'bold',
+                }}>
+                Hello Swiper
+              </Text>
+            </View>
+            <View
+              style={{
+                flex: 1,
+                justifyContent: 'center',
+                alignItems: 'center',
+                backgroundColor: '#9DD6EB',
+              }}>
+              <Text
+                style={{
+                  color: '#fff',
+                  fontSize: 30,
+                  fontWeight: 'bold',
+                }}>
+                Beautiful
+              </Text>
+            </View>
+            <View
+              style={{
+                flex: 1,
+                justifyContent: 'center',
+                alignItems: 'center',
+                backgroundColor: '#9DD6EB',
+              }}>
+              <Text
+                style={{
+                  color: '#fff',
+                  fontSize: 30,
+                  fontWeight: 'bold',
+                }}>
+                And simple
+              </Text>
+            </View>
+          </Swiper>
+        </View>
+        {this.state.loadingVisible && (
           <Loading loadingVisible={this.state.loadingVisible} />
         )}
         <Button
@@ -177,9 +144,57 @@ class HomeScene extends Component {
         <Button
           title="打开Loading"
           onPress={() => this.setState({loadingVisible: true})}
-        /> */}
+        />
+        <ScrollableTabView
+          tabBarPosition="top"
+          renderTabBar={() => (
+            <ScrollableTabBar
+              style={styles.scrollStyle}
+              tabStyle={styles.tabStyle}
+            />
+          )}
+          tabBarTextStyle={styles.tabBarTextStyle}
+          tabBarInactiveTextColor={'black'}
+          tabBarActiveTextColor={'red'}
+          tabBarUnderlineStyle={styles.underlineStyle}
+          initialPage={0}>
+          <HomeArticleView
+            infos={[{key: 'a'}, {key: 'b'}, {key: 'b'}, {key: 'b'}, {key: 'b'}]}
+            key={1}
+            tabLabel={'关注'}
+          />
+          <HomeArticleView
+            infos={[{key: 'a'}, {key: 'b'}]}
+            key={2}
+            tabLabel={'推荐'}
+          />
+          <HomeArticleView key={3} tabLabel={'预告片'} />
+          <HomeArticleView key={4} tabLabel={'热文榜'} />
+          <HomeArticleView key={5} tabLabel={'热文榜'} />
+          <HomeArticleView key={6} tabLabel={'热文榜'} />
+          <HomeArticleView key={7} tabLabel={'热文榜'} />
+          <HomeArticleView key={8} tabLabel={'受益人'} />
+        </ScrollableTabView>
+        {/* </ScrollView> */}
       </SafeAreaView>
     );
   }
 }
+const styles = StyleSheet.create({
+  tabStyle: {},
+  scrollStyle: {
+    borderWidth: 0,
+    backgroundColor: 'white',
+  },
+  tabBarTextStyle: {
+    fontSize: 14,
+    fontWeight: 'normal',
+  },
+  underlineStyle: {
+    height: 4,
+    backgroundColor: 'red',
+    borderRadius: 4,
+    width: 20,
+  },
+});
 export default HomeScene;

@@ -17,7 +17,8 @@
     "react-native-gesture-handler": "^1.4.1",
     "react-native-linear-gradient": "^2.5.6",
     "react-native-root-modal": "^5.0.0",
-    "react-native-scrollable-tab-view": "^1.0.0",
+    "react-native-scrollable-tab-view-forked": "^1.0.9",
+    "react-native-swiper": "^1.6.0-nightly.5",
     "react-native-webview": "^7.4.3",
     "react-navigation": "^3.11.1"
   },
