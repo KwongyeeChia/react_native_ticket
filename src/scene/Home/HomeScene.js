@@ -44,6 +44,7 @@ class HomeScene extends Component {
         {key: 'a'},
         {key: 'b'},
       ],
+      introData: [{key: 'a'}, {key: 'b'}],
     };
   }
   UNSAFE_componentWillMount() {
@@ -84,12 +85,18 @@ class HomeScene extends Component {
       }, 1000);
     }
   }
-  doLoadMoreData = () => {
-    let {flatData} = this.state;
-    console.log('before =>', flatData);
-    flatData.push({key: 'b'});
-    console.log('after =>', flatData);
-    this.setState({flatData: flatData});
+  doLoadMoreData = type => {
+    let {flatData, introData} = this.state;
+    if (type === 1) {
+      console.log('before =>', flatData);
+      flatData.push({key: 'b'});
+      console.log('after =>', flatData);
+    } else {
+      console.log('before =>', introData);
+      introData.push({key: 'b'});
+      console.log('after =>', introData);
+    }
+    this.setState({flatData, introData});
   };
   _renderSwiper = () => {
     return (
@@ -158,7 +165,7 @@ class HomeScene extends Component {
   }
   render() {
     const {navigate} = this.props.navigation;
-    let {flatData} = this.state;
+    let {flatData, introData} = this.state;
     return (
       <SafeAreaView style={{flex: 1}}>
         <CustomStatusBar />
@@ -298,11 +305,16 @@ class HomeScene extends Component {
               infos={flatData}
               key={1}
               tabLabel={'关注'}
-              AddListData={this.doLoadMoreData}
+              AddListData={() => {
+                this.doLoadMoreData(1);
+              }}
             />
             <HomeArticleView
-              infos={[{key: 'a'}, {key: 'b'}]}
+              infos={introData}
               key={2}
+              AddListData={() => {
+                this.doLoadMoreData(2);
+              }}
               tabLabel={'推荐'}
             />
             <HomeArticleView key={3} tabLabel={'预告片'} />
