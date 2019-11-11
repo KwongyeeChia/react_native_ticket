@@ -10,6 +10,8 @@ import {
   ScrollView,
   View,
   Text,
+  FlatList,
+  Image,
 } from 'react-native';
 
 import Swiper from 'react-native-swiper';
@@ -28,6 +30,20 @@ class HomeScene extends Component {
       loadingVisible: false,
       isClick: true,
       currentTabIndex: 0,
+      flatData: [
+        {key: 'a'},
+        {key: 'b'},
+        {key: 'a'},
+        {key: 'b'},
+        {key: 'a'},
+        {key: 'b'},
+        {key: 'a'},
+        {key: 'b'},
+        {key: 'a'},
+        {key: 'b'},
+        {key: 'a'},
+        {key: 'b'},
+      ],
     };
   }
   UNSAFE_componentWillMount() {
@@ -68,114 +84,253 @@ class HomeScene extends Component {
       }, 1000);
     }
   }
+  doLoadMoreData = () => {
+    let {flatData} = this.state;
+    console.log('before =>', flatData);
+    flatData.push({key: 'b'});
+    console.log('after =>', flatData);
+    this.setState({flatData: flatData});
+  };
+  _renderSwiper = () => {
+    return (
+      <Swiper showsPagination={false}>
+        <View
+          style={{
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'center',
+            backgroundColor: '#9DD6EB',
+          }}>
+          <Text
+            style={{
+              color: '#fff',
+              fontSize: 30,
+              fontWeight: 'bold',
+            }}>
+            Hello Swiper
+          </Text>
+        </View>
+        <View
+          style={{
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'center',
+            backgroundColor: '#9DD6EB',
+          }}>
+          <Text
+            style={{
+              color: '#fff',
+              fontSize: 30,
+              fontWeight: 'bold',
+            }}>
+            Beautiful
+          </Text>
+        </View>
+        <View
+          style={{
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'center',
+            backgroundColor: '#9DD6EB',
+          }}>
+          <Text
+            style={{
+              color: '#fff',
+              fontSize: 30,
+              fontWeight: 'bold',
+            }}>
+            And simple
+          </Text>
+        </View>
+      </Swiper>
+    );
+  };
+  onScroll(event) {
+    console.log('event =>', event);
+    // const { loading, status, data } = this.state;
+    // const { onEndReachedThreshold, noMoreLoading } = this.props;
+    // if (noMoreLoading) return;
+    // const { contentSize, contentOffset, layoutMeasurement } = event.nativeEvent;
+    // const loadMore = contentSize.height - contentOffset.y < layoutMeasurement.height + (contentSize.height * onEndReachedThreshold);
+    // if (loadMore && !loading && status != 'end' && data.length) {
+    // 	this.onLoading();
+    // }
+  }
   render() {
     const {navigate} = this.props.navigation;
-    let {currentTabIndex} = this.state;
+    let {flatData} = this.state;
     return (
       <SafeAreaView style={{flex: 1}}>
-        {/* <ScrollView style={{flex: 1}}> */}
         <CustomStatusBar />
-        <View style={{width: screen.width, height: 200}}>
-          <Swiper showsPagination={false}>
+        <ScrollView
+          stickyHeaderIndices={[4]}
+          style={{flex: 1, borderEndColor: 'red', borderWidth: 1}}>
+          <View style={{height: 300, width: screen.width}}>
+            {this._renderSwiper()}
+          </View>
+          <View>
             <View
               style={{
                 flex: 1,
-                justifyContent: 'center',
-                alignItems: 'center',
-                backgroundColor: '#9DD6EB',
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                paddingHorizontal: 20,
+                paddingVertical: 20,
               }}>
-              <Text
-                style={{
-                  color: '#fff',
-                  fontSize: 30,
-                  fontWeight: 'bold',
-                }}>
-                Hello Swiper
-              </Text>
+              <Text>热映影片</Text>
+              <Text>周票房榜</Text>
             </View>
+            <ScrollView
+              showsHorizontalScrollIndicator={false}
+              style={{flex: 1, paddingHorizontal: 20}}
+              horizontal>
+              {[1, 2, 3, 4, 5, 6, 7, 8].map((item, index) => {
+                return (
+                  <View style={{marginRight: 10}}>
+                    <Image
+                      style={{
+                        width: 100,
+                        height: 120,
+                        backgroundColor: '#f1f1f1',
+                        marginBottom: 10,
+                      }}
+                    />
+                    <View>
+                      <Text>少年的你</Text>
+                      <Text>票房榜No.1</Text>
+                    </View>
+                  </View>
+                );
+              })}
+            </ScrollView>
+          </View>
+          <View>
             <View
               style={{
                 flex: 1,
-                justifyContent: 'center',
-                alignItems: 'center',
-                backgroundColor: '#9DD6EB',
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                paddingHorizontal: 20,
+                paddingVertical: 20,
               }}>
-              <Text
-                style={{
-                  color: '#fff',
-                  fontSize: 30,
-                  fontWeight: 'bold',
-                }}>
-                Beautiful
-              </Text>
+              <Text>即将上映</Text>
+              <Text>想看榜</Text>
             </View>
+            <ScrollView
+              showsHorizontalScrollIndicator={false}
+              style={{flex: 1, paddingHorizontal: 20}}
+              horizontal>
+              {[1, 2, 3, 4, 5, 6, 7, 8].map((item, index) => {
+                return (
+                  <View style={{marginRight: 10}}>
+                    <Image
+                      style={{
+                        width: 100,
+                        height: 120,
+                        backgroundColor: '#f1f1f1',
+                        marginBottom: 10,
+                      }}
+                    />
+                    <View>
+                      <Text>少年的你</Text>
+                      <Text>票房榜No.1</Text>
+                    </View>
+                  </View>
+                );
+              })}
+            </ScrollView>
+          </View>
+          <View>
             <View
               style={{
                 flex: 1,
-                justifyContent: 'center',
-                alignItems: 'center',
-                backgroundColor: '#9DD6EB',
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                paddingHorizontal: 20,
+                paddingVertical: 20,
               }}>
-              <Text
-                style={{
-                  color: '#fff',
-                  fontSize: 30,
-                  fontWeight: 'bold',
-                }}>
-                And simple
-              </Text>
+              <Text>精彩演出</Text>
+              <Text>演出日历</Text>
             </View>
-          </Swiper>
-        </View>
-        {this.state.loadingVisible && (
-          <Loading loadingVisible={this.state.loadingVisible} />
-        )}
-        <Button
-          title="H5"
-          onPress={() => navigate('Web', {url: 'https://www.baidu.com'})}
-        />
-        <Button title="用户许可" onPress={() => navigate('Per')} />
-        <Button
-          title="打开模态窗口"
-          onPress={() => {
-            this.showModal();
-          }}
-        />
-        <Button
-          title="打开Loading"
-          onPress={() => this.setState({loadingVisible: true})}
-        />
-        <ScrollableTabView
-          tabBarPosition="top"
-          renderTabBar={() => (
-            <ScrollableTabBar
-              style={styles.scrollStyle}
-              tabStyle={styles.tabStyle}
+            <ScrollView
+              showsHorizontalScrollIndicator={false}
+              style={{flex: 1, paddingHorizontal: 20}}
+              horizontal>
+              {[1, 2, 3, 4, 5, 6, 7, 8].map((item, index) => {
+                return (
+                  <View style={{marginRight: 10}}>
+                    <Image
+                      style={{
+                        width: 100,
+                        height: 120,
+                        backgroundColor: '#f1f1f1',
+                        marginBottom: 10,
+                      }}
+                    />
+                    <View>
+                      <Text>少年的你</Text>
+                      <Text>票房榜No.1</Text>
+                    </View>
+                  </View>
+                );
+              })}
+            </ScrollView>
+          </View>
+          <ScrollableTabView
+            style={{
+              height: screen.height - 50,
+              // borderWidth: 1,
+              // borderColor: 'red',
+            }}
+            tabBarPosition="top"
+            renderTabBar={() => (
+              <ScrollableTabBar
+                style={styles.scrollStyle}
+                tabStyle={styles.tabStyle}
+              />
+            )}
+            tabBarTextStyle={styles.tabBarTextStyle}
+            tabBarInactiveTextColor={'black'}
+            tabBarActiveTextColor={'red'}
+            tabBarUnderlineStyle={styles.underlineStyle}
+            initialPage={0}>
+            <HomeArticleView
+              infos={flatData}
+              key={1}
+              tabLabel={'关注'}
+              AddListData={this.doLoadMoreData}
             />
+            <HomeArticleView
+              infos={[{key: 'a'}, {key: 'b'}]}
+              key={2}
+              tabLabel={'推荐'}
+            />
+            <HomeArticleView key={3} tabLabel={'预告片'} />
+            <HomeArticleView key={4} tabLabel={'热文榜'} />
+            <HomeArticleView key={5} tabLabel={'热文榜'} />
+            <HomeArticleView key={6} tabLabel={'热文榜'} />
+            <HomeArticleView key={7} tabLabel={'热文榜'} />
+            <HomeArticleView key={8} tabLabel={'受益人'} />
+          </ScrollableTabView>
+          {/* {this.state.loadingVisible && (
+            <Loading loadingVisible={this.state.loadingVisible} />
           )}
-          tabBarTextStyle={styles.tabBarTextStyle}
-          tabBarInactiveTextColor={'black'}
-          tabBarActiveTextColor={'red'}
-          tabBarUnderlineStyle={styles.underlineStyle}
-          initialPage={0}>
-          <HomeArticleView
-            infos={[{key: 'a'}, {key: 'b'}, {key: 'b'}, {key: 'b'}, {key: 'b'}]}
-            key={1}
-            tabLabel={'关注'}
+          <Button
+            title="H5"
+            onPress={() => navigate('Web', {url: 'https://www.baidu.com'})}
           />
-          <HomeArticleView
-            infos={[{key: 'a'}, {key: 'b'}]}
-            key={2}
-            tabLabel={'推荐'}
+          <Button title="用户许可" onPress={() => navigate('Per')} />
+          <Button
+            title="打开模态窗口"
+            onPress={() => {
+              this.showModal();
+            }}
           />
-          <HomeArticleView key={3} tabLabel={'预告片'} />
-          <HomeArticleView key={4} tabLabel={'热文榜'} />
-          <HomeArticleView key={5} tabLabel={'热文榜'} />
-          <HomeArticleView key={6} tabLabel={'热文榜'} />
-          <HomeArticleView key={7} tabLabel={'热文榜'} />
-          <HomeArticleView key={8} tabLabel={'受益人'} />
-        </ScrollableTabView>
-        {/* </ScrollView> */}
+          <Button
+            title="打开Loading"
+            onPress={() => this.setState({loadingVisible: true})}
+          /> */}
+        </ScrollView>
       </SafeAreaView>
     );
   }
