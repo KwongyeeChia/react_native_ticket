@@ -11,6 +11,7 @@ import {
   View,
   Text,
   FlatList,
+  RefreshControl,
   Image,
 } from 'react-native';
 
@@ -45,6 +46,7 @@ class HomeScene extends Component {
         {key: 'b'},
       ],
       introData: [{key: 'a'}, {key: 'b'}],
+      isRefresing: false,
     };
   }
   UNSAFE_componentWillMount() {
@@ -170,118 +172,134 @@ class HomeScene extends Component {
       <SafeAreaView style={{flex: 1}}>
         <CustomStatusBar />
         <ScrollView
-          stickyHeaderIndices={[4]}
-          style={{flex: 1, borderEndColor: 'red', borderWidth: 1}}>
-          <View style={{height: 300, width: screen.width}}>
+          stickyHeaderIndices={[2]}
+          refreshControl={
+            <RefreshControl
+              refreshing={this.state.isRefreshing}
+              onRefresh={() => this._onRefresh()}
+              colors={['#ff7887']}
+            />
+          }>
+          <View style={{height: screen.height / 4, width: screen.width}}>
             {this._renderSwiper()}
           </View>
-          <View>
-            <View
-              style={{
-                flex: 1,
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                paddingHorizontal: 20,
-                paddingVertical: 20,
-              }}>
-              <Text>热映影片</Text>
-              <Text>周票房榜</Text>
-            </View>
-            <ScrollView
-              showsHorizontalScrollIndicator={false}
-              style={{flex: 1, paddingHorizontal: 20}}
-              horizontal>
-              {[1, 2, 3, 4, 5, 6, 7, 8].map((item, index) => {
-                return (
-                  <View style={{marginRight: 10}}>
-                    <Image
-                      style={{
-                        width: 100,
-                        height: 120,
-                        backgroundColor: '#f1f1f1',
-                        marginBottom: 10,
-                      }}
-                    />
-                    <View>
-                      <Text>少年的你</Text>
-                      <Text>票房榜No.1</Text>
+          <View
+            style={{
+              // height: screen.height / 3,
+              flex: 1,
+              width: screen.width,
+              borderWidth: 1,
+              borderColor: 'red',
+              flexDirection: 'column',
+            }}>
+            <View>
+              <View
+                style={{
+                  flex: 1,
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  paddingHorizontal: 20,
+                  paddingVertical: 20,
+                }}>
+                <Text>热映影片</Text>
+                <Text>周票房榜</Text>
+              </View>
+              <ScrollView
+                showsHorizontalScrollIndicator={false}
+                style={{flex: 1, paddingHorizontal: 20}}
+                horizontal>
+                {[1, 2, 3, 4, 5, 6, 7, 8].map((item, index) => {
+                  return (
+                    <View style={{marginRight: 10}}>
+                      <Image
+                        style={{
+                          width: 100,
+                          height: 120,
+                          backgroundColor: '#f1f1f1',
+                          marginBottom: 10,
+                        }}
+                      />
+                      <View>
+                        <Text>少年的你</Text>
+                        <Text>票房榜No.1</Text>
+                      </View>
                     </View>
-                  </View>
-                );
-              })}
-            </ScrollView>
-          </View>
-          <View>
-            <View
-              style={{
-                flex: 1,
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                paddingHorizontal: 20,
-                paddingVertical: 20,
-              }}>
-              <Text>即将上映</Text>
-              <Text>想看榜</Text>
+                  );
+                })}
+              </ScrollView>
             </View>
-            <ScrollView
-              showsHorizontalScrollIndicator={false}
-              style={{flex: 1, paddingHorizontal: 20}}
-              horizontal>
-              {[1, 2, 3, 4, 5, 6, 7, 8].map((item, index) => {
-                return (
-                  <View style={{marginRight: 10}}>
-                    <Image
-                      style={{
-                        width: 100,
-                        height: 120,
-                        backgroundColor: '#f1f1f1',
-                        marginBottom: 10,
-                      }}
-                    />
-                    <View>
-                      <Text>少年的你</Text>
-                      <Text>票房榜No.1</Text>
+            <View>
+              <View
+                style={{
+                  flex: 1,
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  paddingHorizontal: 20,
+                  paddingVertical: 20,
+                }}>
+                <Text>即将上映</Text>
+                <Text>想看榜</Text>
+              </View>
+              <ScrollView
+                showsHorizontalScrollIndicator={false}
+                style={{flex: 1, paddingHorizontal: 20}}
+                horizontal>
+                {[1, 2, 3, 4, 5, 6, 7, 8].map((item, index) => {
+                  return (
+                    <View style={{marginRight: 10}}>
+                      <Image
+                        style={{
+                          width: 100,
+                          height: 120,
+                          backgroundColor: '#f1f1f1',
+                          marginBottom: 10,
+                        }}
+                      />
+                      <View>
+                        <Text>少年的你</Text>
+                        <Text>票房榜No.1</Text>
+                      </View>
                     </View>
-                  </View>
-                );
-              })}
-            </ScrollView>
-          </View>
-          <View>
-            <View
-              style={{
-                flex: 1,
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                paddingHorizontal: 20,
-                paddingVertical: 20,
-              }}>
-              <Text>精彩演出</Text>
-              <Text>演出日历</Text>
+                  );
+                })}
+              </ScrollView>
             </View>
-            <ScrollView
-              showsHorizontalScrollIndicator={false}
-              style={{flex: 1, paddingHorizontal: 20}}
-              horizontal>
-              {[1, 2, 3, 4, 5, 6, 7, 8].map((item, index) => {
-                return (
-                  <View style={{marginRight: 10}}>
-                    <Image
-                      style={{
-                        width: 100,
-                        height: 120,
-                        backgroundColor: '#f1f1f1',
-                        marginBottom: 10,
-                      }}
-                    />
-                    <View>
-                      <Text>少年的你</Text>
-                      <Text>票房榜No.1</Text>
+            <View>
+              <View
+                style={{
+                  flex: 1,
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  paddingHorizontal: 20,
+                  paddingVertical: 20,
+                }}>
+                <Text>精彩演出</Text>
+                <Text>演出日历</Text>
+              </View>
+              <ScrollView
+                showsHorizontalScrollIndicator={false}
+                style={{flex: 1, paddingHorizontal: 20}}
+                horizontal>
+                {[1, 2, 3, 4, 5, 6, 7, 8].map((item, index) => {
+                  return (
+                    <View style={{marginRight: 10}}>
+                      <Image
+                        style={{
+                          width: 100,
+                          height: 120,
+                          backgroundColor: '#f1f1f1',
+                          marginBottom: 10,
+                        }}
+                      />
+                      <View>
+                        <Text>少年的你</Text>
+                        <Text>票房榜No.1</Text>
+                      </View>
                     </View>
-                  </View>
-                );
-              })}
-            </ScrollView>
+                  );
+                })}
+              </ScrollView>
+            </View>
           </View>
           <ScrollableTabView
             style={{
@@ -345,6 +363,14 @@ class HomeScene extends Component {
         </ScrollView>
       </SafeAreaView>
     );
+  }
+  _onRefresh() {
+    this.setState({isRefreshing: true});
+    setTimeout(() => {
+      this.setState({
+        isRefreshing: false,
+      });
+    }, 2000);
   }
 }
 const styles = StyleSheet.create({

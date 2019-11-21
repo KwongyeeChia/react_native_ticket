@@ -16,6 +16,7 @@ class MovieScene extends Component {
     const {navigate} = this.props.navigation;
     return (
       <ScrollView
+        showsVerticalScrollIndicator={false}
         refreshControl={
           <RefreshControl
             refreshing={this.state.isRefreshing}
